@@ -9,6 +9,7 @@ class SessionsController < ApplicationController
       # has_secure_passwordが提供するauthenticateメソッド
       # パスワード認証周りの機能を実装してくれる　認証に失敗するとfalseを返す
       log_in user
+      params[:session][:remember_me] == '1' ? remember(user) : forget(user)
       redirect_to user
     else
       flash.now[:danger] = 'Invalid email/password combination'
@@ -17,7 +18,7 @@ class SessionsController < ApplicationController
   end
 
   def destroy
-    log_out
+    log_out if logged_in?
     redirect_to root_url
   end
 end
